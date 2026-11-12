@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">Jeia</string>
+
+    <!-- Accueil -->
+    <string name="home_title">Jeia</string>
+    <string name="home_ring_status">Bague : %1$s</string>
+    <string name="ring_state_disconnected">déconnectée</string>
+    <string name="ring_state_scanning">recherche…</string>
+    <string name="ring_state_connected">connectée</string>
+    <string name="home_connect">Connecter la bague</string>
+    <string name="home_disconnect">Déconnecter</string>
+    <string name="home_dev_menu">Menu développeur</string>
+
+    <!-- Alerte -->
+    <string name="alert_title">Alerte</string>
+    <string name="alert_countdown">Envoi de l\'alerte dans %1$d s</string>
+    <string name="alert_sending">Envoi en cours…</string>
+    <string name="alert_sent">Alerte envoyée</string>
+    <string name="alert_cancelled">Alerte annulée</string>
+    <string name="alert_cancel">Annuler</string>
+    <string name="alert_i_am_fine">Je vais bien</string>
+
+    <!-- Menu développeur -->
+    <string name="dev_title">Menu développeur</string>
+    <string name="dev_simulate_press">Simuler un appui long</string>
+    <string name="dev_simulate_cancel">Simuler une annulation</string>
+    <string name="dev_last_ack">Dernier ACK : %1$s</string>
+    <string name="dev_none">aucun</string>
+    <string name="dev_back">Retour</string>
 </resources>
