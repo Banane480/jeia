@@ -1,3 +1,52 @@
 <resources>
     <string name="app_name">Jeia</string>
+
+    <!-- Accueil -->
+    <string name="home_title">Jeia</string>
+    <string name="home_ring_status">Bague : %1$s</string>
+    <string name="ring_state_disconnected">déconnectée</string>
+    <string name="ring_state_scanning">recherche…</string>
+    <string name="ring_state_connected">connectée</string>
+    <string name="home_connect">Connecter la bague</string>
+    <string name="home_disconnect">Déconnecter</string>
+    <string name="home_dev_menu">Menu développeur</string>
+    <string name="home_emergency_contacts">Contacts d\'urgence</string>
+    <string name="home_source_mode">Mode de bague :</string>
+    <string name="home_source_sim">Simulation (sans matériel)</string>
+    <string name="home_source_ble">Bluetooth réel (ESP32)</string>
+    <string name="home_bg_service">Surveillance en arrière-plan</string>
+    <string name="home_bg_service_desc">Garde la connexion active même écran verrouillé</string>
+
+    <!-- Alerte -->
+    <string name="alert_title">Alerte</string>
+    <string name="alert_countdown">Envoi de l\'alerte dans %1$d s</string>
+    <string name="alert_sending">Envoi en cours…</string>
+    <string name="alert_sent">Alerte envoyée</string>
+    <string name="alert_cancelled">Alerte annulée</string>
+    <string name="alert_cancel">Annuler</string>
+    <string name="alert_i_am_fine">Je vais bien</string>
+    <string name="alert_gps_position">Position GPS : %1$s</string>
+    <string name="alert_contacts_notified">Contacts notifiés : %1$d</string>
+
+    <!-- Contacts d'urgence -->
+    <string name="contacts_title">Contacts d\'urgence</string>
+    <string name="contacts_empty">Aucun contact d\'urgence enregistré.</string>
+    <string name="contacts_add">Ajouter un contact</string>
+    <string name="contacts_name_hint">Nom du proche</string>
+    <string name="contacts_phone_hint">Numéro de téléphone</string>
+    <string name="contacts_save">Enregistrer</string>
+    <string name="contacts_delete">Supprimer</string>
+    <string name="contacts_gps_test">Tester l\'acquisition GPS</string>
+    <string name="contacts_gps_acquiring">Acquisition de la position GPS en cours…</string>
+
+    <!-- Menu développeur -->
+    <string name="dev_title">Menu développeur</string>
+    <string name="dev_simulate_press">Simuler un appui long</string>
+    <string name="dev_simulate_cancel">Simuler une annulation</string>
+    <string name="dev_last_ack">Dernier ACK : %1$s</string>
+    <string name="dev_none">aucun</string>
+    <string name="dev_back">Retour</string>
+
+    <!-- Service en arrière-plan -->
+    <string name="service_notification_text">Statut de la bague : %1$s</string>
 </resources>
