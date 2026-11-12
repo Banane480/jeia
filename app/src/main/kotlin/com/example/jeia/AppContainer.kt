@@ -1,18 +1,45 @@
 package com.example.jeia
 
 import android.app.Application
+import android.content.Context
 import com.example.jeia.data.FakeRingRepository
+import com.example.jeia.data.SharedPreferencesEmergencyContactsRepository
+import com.example.jeia.data.SwitchableRingRepository
+import com.example.jeia.data.alert.AndroidAlertDispatcher
+import com.example.jeia.data.ble.BleRingRepository
+import com.example.jeia.data.location.AndroidLocationProvider
+import com.example.jeia.domain.AlertDispatcher
+import com.example.jeia.domain.EmergencyContactsRepository
+import com.example.jeia.domain.LocationProvider
 import com.example.jeia.domain.RingRepository
 
 /**
- * Injection de dépendances manuelle (Koin viendra si le projet grossit).
- * Pour passer au vrai BLE, remplacer [ringRepository] par `BleRingRepository`.
+ * Injection de dépendances de l'application Jeia.
+ * Supporte le mode Simulation et le mode Bluetooth Low Energy réel.
  */
-class AppContainer {
+class AppContainer(context: Context) {
   val fakeRing = FakeRingRepository()
-  val ringRepository: RingRepository = fakeRing
+  val bleRing = BleRingRepository(context)
+  val switchableRing = SwitchableRingRepository(fakeRing, bleRing)
+
+  val ringRepository: RingRepository = switchableRing
+
+  val emergencyContactsRepository: EmergencyContactsRepository =
+    SharedPreferencesEmergencyContactsRepository(context)
+
+  val locationProvider: LocationProvider =
+    AndroidLocationProvider(context)
+
+  val alertDispatcher: AlertDispatcher =
+    AndroidAlertDispatcher(context)
 }
 
 class JeiaApplication : Application() {
-  val container = AppContainer()
+  lateinit var container: AppContainer
+    private set
+
+  override fun onCreate() {
+    super.onCreate()
+    container = AppContainer(this)
+  }
 }

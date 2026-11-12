@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jeia.domain.AckStatus
 import com.example.jeia.domain.AlertAck
+import com.example.jeia.domain.AlertDispatcher
+import com.example.jeia.domain.EmergencyAlertResult
+import com.example.jeia.domain.EmergencyContactsRepository
+import com.example.jeia.domain.LocationProvider
 import com.example.jeia.domain.RingRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,16 +21,23 @@ sealed interface AlertUiState {
 
   data object Sending : AlertUiState
 
-  data object Sent : AlertUiState
+  data class Sent(val result: EmergencyAlertResult) : AlertUiState
 
   data object Cancelled : AlertUiState
 }
 
 /**
- * Flux d'alerte : compte à rebours d'annulation, puis envoi, puis ACK vers la bague.
+ * Flux d'alerte :
+ * 1. Compte à rebours d'annulation (configurable).
+ * 2. Récupération de la position GPS précise.
+ * 3. Envoi de l'alerte aux contacts d'urgence et au backend.
+ * 4. Écriture de l'ACK vers la bague (la LED clignote 2 fois pour confirmer).
  */
 class AlertViewModel(
   private val repository: RingRepository,
+  private val locationProvider: LocationProvider,
+  private val emergencyContactsRepository: EmergencyContactsRepository,
+  private val alertDispatcher: AlertDispatcher,
   private val counter: Int,
   countdownSeconds: Int = DEFAULT_COUNTDOWN_SECONDS,
 ) : ViewModel() {
@@ -41,9 +52,21 @@ class AlertViewModel(
         delay(1_000)
       }
       _uiState.value = AlertUiState.Sending
-      // TODO phase 6 : position GPS puis envoi HTTPS au backend (avec file persistante).
-      repository.sendAck(AlertAck(counter, AckStatus.SENT))
-      _uiState.value = AlertUiState.Sent
+
+      // 1. Position GPS
+      val location = locationProvider.getCurrentLocation()
+
+      // 2. Contacts d'urgence
+      val contacts = emergencyContactsRepository.contacts.value
+
+      // 3. Envoi de l'alerte
+      val result = alertDispatcher.dispatchAlert(counter, location, contacts)
+
+      // 4. Acquittement vers la bague pour déclencher le clignotement de confirmation
+      val ackStatus = if (result.success) AckStatus.SENT else AckStatus.FAILED
+      repository.sendAck(AlertAck(counter, ackStatus))
+
+      _uiState.value = AlertUiState.Sent(result)
     }
 
   fun cancel() {

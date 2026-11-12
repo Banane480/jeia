@@ -12,18 +12,25 @@
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:maxSdkVersion="30" />
 
-    <!-- Position pour l'alerte (le fond sera demandé en deux temps, plus tard) -->
+    <!-- Position pour l'alerte SOS -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
+    <!-- Notifications et Foreground Service (Phase 5) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
 
-    <!-- TODO phase 5 : FOREGROUND_SERVICE, FOREGROUND_SERVICE_CONNECTED_DEVICE et ACCESS_BACKGROUND_LOCATION
-         à ajouter avec le service au premier plan. -->
+    <!-- Envoi de SMS de secours d'urgence aux proches (Phase 6) -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
         android:required="false" />
 
     <application
@@ -35,6 +42,7 @@
         android:supportsRtl="true"
         android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.Jeia">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -43,6 +51,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Service d'arrière-plan pour maintenir la liaison BLE avec la bague -->
+        <service
+            android:name=".service.JeiaRingService"
+            android:foregroundServiceType="connectedDevice"
+            android:exported="false" />
+
     </application>
 
 </manifest>

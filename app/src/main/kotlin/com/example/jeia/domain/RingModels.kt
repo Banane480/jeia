@@ -27,3 +27,36 @@ enum class RingConnectionState {
   SCANNING,
   CONNECTED,
 }
+
+/** Type de source de la bague (matériel réel ou simulateur). */
+enum class RingSourceType {
+  SIMULATION,
+  BLUETOOTH,
+}
+
+/** Coordonnées et détails de localisation GPS lors d'une alerte. */
+data class LocationInfo(
+  val latitude: Double,
+  val longitude: Double,
+  val accuracyMeters: Float? = null,
+  val timestamp: Long = System.currentTimeMillis(),
+) {
+  val googleMapsUrl: String
+    get() = "https://maps.google.com/?q=$latitude,$longitude"
+}
+
+/** Contact d'urgence prévenu en cas de SOS. */
+data class EmergencyContact(
+  val id: String,
+  val name: String,
+  val phoneNumber: String,
+)
+
+/** Résultat de la diffusion d'une alerte d'urgence. */
+data class EmergencyAlertResult(
+  val success: Boolean,
+  val location: LocationInfo?,
+  val contactsNotifiedCount: Int,
+  val message: String,
+)
+

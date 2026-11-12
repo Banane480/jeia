@@ -14,10 +14,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.jeia.R
+import com.example.jeia.domain.EmergencyAlertResult
+import com.example.jeia.domain.LocationInfo
 import com.example.jeia.ui.theme.JeiaTheme
 
 @Composable
@@ -40,7 +43,7 @@ internal fun AlertContent(
   Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
     Column(
       modifier = Modifier.fillMaxSize().padding(innerPadding).padding(24.dp),
-      verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
+      verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       when (state) {
@@ -48,6 +51,7 @@ internal fun AlertContent(
           Text(
             text = stringResource(R.string.alert_countdown, state.secondsLeft),
             style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center,
           )
           Button(onClick = onCancel) { Text(stringResource(R.string.alert_cancel)) }
         }
@@ -56,19 +60,45 @@ internal fun AlertContent(
           Text(
             text = stringResource(R.string.alert_sending),
             style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center,
           )
         }
-        AlertUiState.Sent -> {
+        is AlertUiState.Sent -> {
           Text(
             text = stringResource(R.string.alert_sent),
             style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary,
           )
+
+          Text(
+            text = state.result.message,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+          )
+
+          state.result.location?.let { loc ->
+            Text(
+              text = stringResource(
+                R.string.alert_gps_position,
+                "%.5f, %.5f (±%dm)".format(
+                  loc.latitude,
+                  loc.longitude,
+                  loc.accuracyMeters?.toInt() ?: 0,
+                ),
+              ),
+              style = MaterialTheme.typography.bodyMedium,
+              color = MaterialTheme.colorScheme.secondary,
+              textAlign = TextAlign.Center,
+            )
+          }
+
           Button(onClick = onClose) { Text(stringResource(R.string.alert_i_am_fine)) }
         }
         AlertUiState.Cancelled -> {
           Text(
             text = stringResource(R.string.alert_cancelled),
             style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center,
           )
           Button(onClick = onClose) { Text(stringResource(R.string.dev_back)) }
         }
@@ -81,4 +111,23 @@ internal fun AlertContent(
 @Composable
 private fun AlertCountdownPreview() {
   JeiaTheme { AlertContent(state = AlertUiState.Countdown(3), onCancel = {}, onClose = {}) }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AlertSentPreview() {
+  JeiaTheme {
+    AlertContent(
+      state = AlertUiState.Sent(
+        EmergencyAlertResult(
+          success = true,
+          location = LocationInfo(48.8566, 2.3522, 10f),
+          contactsNotifiedCount = 2,
+          message = "Alerte transmise avec succès aux contacts d'urgence.",
+        )
+      ),
+      onCancel = {},
+      onClose = {},
+    )
+  }
 }

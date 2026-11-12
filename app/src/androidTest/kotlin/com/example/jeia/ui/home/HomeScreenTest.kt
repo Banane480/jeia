@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.example.jeia.domain.RingConnectionState
+import com.example.jeia.domain.RingSourceType
 import com.example.jeia.ui.theme.JeiaTheme
 import org.junit.Rule
 import org.junit.Test
@@ -18,10 +19,16 @@ class HomeScreenTest {
     composeTestRule.setContent {
       JeiaTheme {
         HomeContent(
-          state = HomeUiState(RingConnectionState.DISCONNECTED),
+          state = HomeUiState(
+            connection = RingConnectionState.DISCONNECTED,
+            sourceType = RingSourceType.SIMULATION,
+          ),
           onConnect = {},
           onDisconnect = {},
+          onSetSource = {},
+          onToggleService = {},
           onOpenDevMenu = {},
+          onOpenEmergencyContacts = {},
         )
       }
     }

@@ -242,18 +242,18 @@ Chaque permission est expliquée à l'écran avant d'être demandée.
 
 ---
 
-## 7. Phases de travail
+## 7. Phases de travail et état d'avancement
 
-| Phase | Contenu | Résultat attendu |
-|---|---|---|
-| **0** | Câbler le bouton, flasher un « bouton → LED » | Le bouton fonctionne |
-| **1** | Firmware BLE complet, test avec **nRF Connect** | Événement reçu, ACK qui fait clignoter la LED |
-| **2** | Projet KMP, thème, navigation, `FakeRingRepository` | Appli qui tourne sans matériel |
-| **3** | Scan et connexion BLE avec Kable | L'appli voit « JEIA Ring » |
-| **4** | Réception de l'appui, compte à rebours, écriture de l'ACK | L'appui fait apparaître l'alerte, la LED confirme |
-| **5** | Foreground service et reconnexion automatique | L'alerte fonctionne écran verrouillé |
-| **6** | Position GPS + envoi au backend + SMS de test | L'alerte part vers un vrai numéro |
-| **7** | Cercles famille, carte, vie privée, historique | Version complète |
+| Phase | Contenu | Résultat attendu | Statut |
+|---|---|---|---|
+| **0** | Câbler le bouton, flasher un « bouton → LED » | Le bouton fonctionne | Matériel (ESP32) |
+| **1** | Firmware BLE complet, test avec **nRF Connect** | Événement reçu, ACK qui fait clignoter la LED | Firmware C++ |
+| **2** | Projet Android, thème, navigation, `FakeRingRepository` | Appli qui tourne sans matériel | ✅ **Terminé** |
+| **3** | Scan et connexion BLE avec client Android (`BleRingRepository`) | L'appli voit « JEIA Ring » | ✅ **Terminé** |
+| **4** | Réception de l'appui, compte à rebours, écriture de l'ACK | L'appui fait apparaître l'alerte, la LED confirme | ✅ **Terminé** |
+| **5** | Foreground service (`JeiaRingService`) et maintien en tâche de fond | L'alerte fonctionne écran verrouillé | ✅ **Terminé** |
+| **6** | Position GPS (`LocationProvider`) + SMS d'urgence aux contacts | L'alerte part avec position précise et SMS de secours | ✅ **Terminé** |
+| **7** | Cercles famille, carte, vie privée, historique | Version complète | En cours (écran contacts prêt) |
 
 ---
 
